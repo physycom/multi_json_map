@@ -1,0 +1,10 @@
+JSON1 = lun.json
+TAG1  = LUN
+JSON2 = mar.json
+TAG2  = MAR
+JSON3 = mer.json
+TAG3  = MER
+JSON4 = gio.json
+TAG4  = GIO
+HTML  = week.html
+TITLE = MultiTrip

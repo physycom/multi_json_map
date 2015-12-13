@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html> 
+  <head> 
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+    <title>
+			MultiTrip
+    </title> 
+
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+      #panel {
+        position: absolute;
+        top: 5px;
+        right: 0%;
+        margin-left: -180px;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+      }
+    </style>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script type="text/javascript"  src="https://maps.googleapis.com/maps/api/js?v=3.21&sensor=false"></script>
+    <script type="text/javascript"  src="https://maps.googleapis.com/maps/api/js?libraries=geometry"></script>  
+<!-- Local libraries -->
+    <script type="text/javascript" src="https://raw.githubusercontent.com/physycom/json_to_html/master/ruler/markerwithlabel.js"></script>
+    <script type="text/javascript" src="https://raw.githubusercontent.com/physycom/json_to_html/master/ruler/ContextMenu.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.rawgit.com/physycom/json_to_html/master/ruler/ruler_map.css">
+    <script type="text/javascript" src="https://raw.githubusercontent.com/physycom/json_to_html/master/ruler/ruler_map.js"></script>       
+  </head> 
+
+  <body>
+    <div id="map" style="width: 100%; height: 100%;"></div>
+    
+    <script type="text/javascript">
+			var Trajectory_LUN;
+			var Trajectory_MAR;
+			var Trajectory_MER;
+			var Trajectory_GIO;
+
+			var map;
+
+			function initialize(){
+				var Locations_LUN = [
+
+[44.723141,11.003030,'29/11/2015 21:03:15'],
+[44.722847,11.002631,'30/11/2015 08:00:21'],
+[44.723278,11.001645,'30/11/2015 08:02:04'],
+[44.723122,11.001562,'30/11/2015 08:03:42'],
+[44.722427,11.003380,'30/11/2015 08:04:30'],
+[44.719147,11.006454,'30/11/2015 08:05:19'],
+[44.717960,11.008958,'30/11/2015 08:05:43'],
+[44.714554,11.006718,'30/11/2015 08:06:07'],
+[44.712002,11.002862,'30/11/2015 08:06:31'],
+[44.708244,10.998995,'30/11/2015 08:06:57'],
+[44.703880,10.995229,'30/11/2015 08:07:29'] 
+
+				]
+
+				var Locations_MAR = [
+
+[44.723335,11.003032,'2/12/2015 24:34:15'],
+[44.722984,11.002672,'3/12/2015 02:34:20'],
+[44.723423,11.002947,'3/12/2015 06:36:19'],
+[44.722973,11.003088,'3/12/2015 08:37:06'],
+[44.718365,11.009465,'3/12/2015 09:49:48'],
+[44.712090,11.003320,'3/12/2015 09:50:37'],
+[44.708702,10.999774,'3/12/2015 09:51:14'],
+[44.703003,10.994527,'3/12/2015 09:51:51'],
+[44.701191,10.987096,'3/12/2015 09:52:25'],
+[44.698269,10.978953,'3/12/2015 09:53:02'],
+[44.694546,10.972379,'3/12/2015 09:53:39'] 
+
+				]
+
+				var Locations_MER = [
+
+[0.000000,0.000000,'1/1/2000 01:00:00'],
+[44.723385,11.003256,'1/12/2015 01:33:25'],
+[44.723171,11.001297,'1/12/2015 09:36:34'],
+[44.723392,11.002742,'1/12/2015 09:49:36'],
+[44.722496,11.002777,'1/12/2015 09:50:25'],
+[44.720020,11.002517,'1/12/2015 09:50:57'],
+[44.718773,11.007724,'1/12/2015 09:51:29'],
+[44.715862,11.008113,'1/12/2015 09:52:03'],
+[44.712837,11.004711,'1/12/2015 09:52:35'],
+[44.709442,11.000678,'1/12/2015 09:53:06'],
+[44.705647,10.997327,'1/12/2015 09:53:40'] 
+
+				]
+
+				var Locations_GIO = [
+
+[0.000000,0.000000,'1/1/2000 01:00:00'],
+[44.723171,11.001297,'1/12/2015 09:36:34'],
+[44.722496,11.002777,'1/12/2015 09:50:25'],
+[44.718773,11.007724,'1/12/2015 09:51:29'],
+[44.715862,11.008113,'1/12/2015 09:52:03'],
+[44.712837,11.004711,'1/12/2015 09:52:35'],
+[44.709442,11.000678,'1/12/2015 09:53:06'],
+[44.705647,10.997327,'1/12/2015 09:53:40'] 
+
+				]
+
+
+				map = new google.maps.Map(document.getElementById('map'), {
+					zoom: 17,
+					center: new google.maps.LatLng(Locations_LUN[1][0], Locations_LUN[1][1]),
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				});
+
+				var PolyPath_LUN = [];
+				for(i=0; i<Locations_LUN.length; i++) {
+					PolyPath_LUN.push(new google.maps.LatLng( Locations_LUN[i][0], Locations_LUN[i][1] ) )
+				}
+
+				Trajectory_LUN = new google.maps.Polyline({
+					path: PolyPath_LUN,
+					geodesic: true,
+					strokeColor: '#FF5555',
+					strokeOpacity: 1.,
+					strokeWeight: 2
+				});
+
+				var PolyPath_MAR = [];
+				for(i=0; i<Locations_MAR.length; i++) {
+					PolyPath_MAR.push(new google.maps.LatLng( Locations_MAR[i][0], Locations_MAR[i][1] ) )
+				}
+
+				Trajectory_MAR = new google.maps.Polyline({
+					path: PolyPath_MAR,
+					geodesic: true,
+					strokeColor: '#0000FF',
+					strokeOpacity: 1.,
+					strokeWeight: 2
+				});
+
+				var PolyPath_MER = [];
+				for(i=0; i<Locations_MER.length; i++) {
+					PolyPath_MER.push(new google.maps.LatLng( Locations_MER[i][0], Locations_MER[i][1] ) )
+				}
+
+				Trajectory_MER = new google.maps.Polyline({
+					path: PolyPath_MER,
+					geodesic: true,
+					strokeColor: '#00FF00',
+					strokeOpacity: 1.,
+					strokeWeight: 2
+				});
+
+				var PolyPath_GIO = [];
+				for(i=0; i<Locations_GIO.length; i++) {
+					PolyPath_GIO.push(new google.maps.LatLng( Locations_GIO[i][0], Locations_GIO[i][1] ) )
+				}
+
+				Trajectory_GIO = new google.maps.Polyline({
+					path: PolyPath_GIO,
+					geodesic: true,
+					strokeColor: '#AC0EAC',
+					strokeOpacity: 1.,
+					strokeWeight: 2
+				});
+
+				Trajectory_LUN.setMap(map);
+				Trajectory_MAR.setMap(map);
+				Trajectory_MER.setMap(map);
+				Trajectory_GIO.setMap(map);
+
+				ruler_map = new RulerMap(map);
+			}
+
+			function toggle_LUN(){
+				Trajectory_LUN.setMap(Trajectory_LUN.getMap() ? null : map);
+			};
+			function toggle_MAR(){
+				Trajectory_MAR.setMap(Trajectory_MAR.getMap() ? null : map);
+			};
+			function toggle_MER(){
+				Trajectory_MER.setMap(Trajectory_MER.getMap() ? null : map);
+			};
+			function toggle_GIO(){
+				Trajectory_GIO.setMap(Trajectory_GIO.getMap() ? null : map);
+			};
+
+			google.maps.event.addDomListener(window, 'load', initialize);
+
+		</script>
+		<div id="panel">
+			<button onclick="toggle_LUN()" style="background-color:#FF5555; color:#000">LUN</button>
+			<button onclick="toggle_MAR()" style="background-color:#0000FF; color:#FFF">MAR</button>
+			<button onclick="toggle_MER()" style="background-color:#00FF00; color:#000">MER</button>
+			<button onclick="toggle_GIO()" style="background-color:#AC0EAC; color:#FFF">GIO</button>
+		</div>
+	</body>
+</html>
