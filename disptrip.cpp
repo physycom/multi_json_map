@@ -134,7 +134,7 @@ int main(int argc, char** argv){
             <<",'" 
             << (rec->value().has_member("timestamp") ? rec->value()["timestamp"].as<std::string>() : "NULL" )
             << "']" 
-            << (j != trips_coordinate[i].size() - 1 ? ',' : ' ')
+            << ((j != trips_coordinate[i].size() - 1) ? ',' : ' ')
             << "\n";
         }
         catch (const std::exception& e){
@@ -154,7 +154,7 @@ int main(int argc, char** argv){
             <<",'"
             << ( trips_coordinate[i][j].has_member("timestamp") ? trips_coordinate[i][j]["timestamp"].as<std::string>() : "NULL" )
             << "']" 
-            << ( j != trips_coordinate.size()-1 ? ',' : ' ' ) 
+            << ( (j != trips_coordinate[i].size()-1) ? ',' : ' ' ) 
             << "\n";
         }
         catch (const std::exception& e){
