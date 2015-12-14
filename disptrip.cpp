@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with multi_json_map. If not, see <http://www.gnu.org/licenses/>.
 ***************************************************************************/
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
 #include <fstream>
 #include <string>
