@@ -132,7 +132,7 @@ int main(int argc, char** argv){
             << "," 
             << ( rec->value().has_member("lon") ? rec->value()["lon"].as<double>() : 0.0 )
             <<",'" 
-            << (rec->value().has_member("timestamp") ? rec->value()["timestamp"].as<std::string>() : "NULL" )
+            << (rec->value().has_member("date") ? rec->value()["date"].as<std::string>() : "NULL" )
             << "']" 
             << ((j != trips_coordinate[i].size() - 1) ? ',' : ' ')
             << "\n";
@@ -152,7 +152,7 @@ int main(int argc, char** argv){
             << "," 
             << ( trips_coordinate[i][j].has_member("lon") ? trips_coordinate[i][j]["lon"].as<double>() :  0.0 )
             <<",'"
-            << ( trips_coordinate[i][j].has_member("timestamp") ? trips_coordinate[i][j]["timestamp"].as<std::string>() : "NULL" )
+            << ( trips_coordinate[i][j].has_member("date") ? trips_coordinate[i][j]["date"].as<std::string>() : "NULL" )
             << "']" 
             << ( (j != trips_coordinate[i].size()-1) ? ',' : ' ' ) 
             << "\n";
