@@ -1,5 +1,7 @@
-# multi_json_map
-Along the lines of [json_to_html](https://github.com/physycom/json_to_html) here you have a similar tool which parse a number of JSON files containing gnss coordinates (according to **physycom** standard) and produces an html script to compare them in Google Maps.
+[![Build Status Master](https://travis-ci.org/physycom/multi_json_map.png?branch=master)](https://travis-ci.org/physycom/multi_json_map "master")
+
+
+Along the lines of [json_to_html](https://github.com/physycom/json_to_html) here you have a similar tool which parses a number of JSON files containing gnss coordinates (according to **physycom** standard) and produces an html script to compare them in Google Maps.
 
 ### Installation
 Make with ``make`` makefile, provided in the repo.
@@ -9,7 +11,7 @@ Type
 ```
 distri.exe path/to/config
 ```
-where the config file should rensemble
+where the config file should resemble
 ```
 JSON1 = lun.json
 TAG1  = LUN
@@ -21,4 +23,4 @@ JSON4 = GIO.json
 HTML  = trips.html
 TITLE = MultiTrip
 ```
-*TAG* fields are optional whereas the others fields are mandatory.
+*TAG* fields are optional whereas the other fields are mandatory.
