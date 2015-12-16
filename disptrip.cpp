@@ -32,8 +32,43 @@ using namespace std;
 #define MAJOR_VERSION           1
 #define MINOR_VERSION           0
 
-std::vector<std::string> colors_button({"FF5555", "0000FF", "00FF00", "AC0EAC"});
-std::vector<std::string> colors_text({"000", "FFF", "000", "FFF"});
+std::vector<std::string> colors_button/*({"FF5555", "0000FF", "00FF00", "AC0EAC"})*/;
+std::vector<std::string> colors_text  /*({"000", "FFF", "000", "FFF"})            */;
+
+string HSLtoRGB(double hue, double sat, double light) {
+	double red, green, blue;
+	red = green = blue = light; //default è grigio
+	double v;
+	v = light <= 0.5 ? light*(1. + sat) : light + sat - light*sat;
+	if(v > 0) {
+		double m, sv;
+		int sextant;
+		double fract, vsf, mid1, mid2;
+		m = light + light - v; sv = (v - m) / v;
+		hue *= 6.0; sextant = int(hue);
+		fract = hue - sextant; vsf = v*sv*fract; mid1 = m + vsf; mid2 = v - vsf;
+		switch(sextant) {
+		case 0: red = v; green = mid1; blue = m; break;
+		case 1: red = mid2; green = v; blue = m; break;
+		case 2: red = m; green = v; blue = mid1; break;
+		case 3: red = m; green = mid2; blue = v; break;
+		case 4: red = mid1; green = m; blue = v; break;
+		case 5: red = v; green = m; blue = mid2; break;
+		}
+	}
+	std::stringstream stream;
+
+
+	red *= 255;
+	green *= 255;
+	blue *= 255;
+	stream
+		<< std::setfill('0') << std::setw(2) << std::hex << int(red  )
+		<< std::setfill('0') << std::setw(2) << std::hex << int(green) 
+		<< std::setfill('0') << std::setw(2) << std::hex << int(blue ) ;
+	return stream.str();
+};
+
 
 void usage(char* progname){
   // Usage
@@ -42,6 +77,7 @@ void usage(char* progname){
 }
 
 int main(int argc, char** argv){
+
   std::cout << "Display_Multiple_Trips (for Google Maps only) v" << MAJOR_VERSION << "." << MINOR_VERSION << std::endl;
 
 // Parsing command line
@@ -56,7 +92,7 @@ int main(int argc, char** argv){
 
 // Safe config file parsing
   std::vector<std::string> input_names, input_tags;
-  std::string output_name, output_title;
+  std::string output_name, output_title,input_folder("");
   std::string key, equal, value;
   ifstream filein(config_name);
   if( !filein ) {
@@ -75,22 +111,34 @@ int main(int argc, char** argv){
       while( input_names.size() > input_tags.size() ) input_tags.push_back("DEFAULT");
       output_name = value;
     }
-    else if ( key == "TITLE" ){
-      output_title = value;
-    }
+		else if(key == "TITLE") {
+			output_title = value;
+		}
+		else if(key == "FOLDER") {
+			input_folder = value;
+		}
     else{ 
       cout << "Key " << key << " unknown. Edit " << config_name << endl;
       exit(3);
     }
   }
   filein.close();
+	//****************
+	double indice = 0;
+
   if( input_names.size() != input_tags.size() ){
     std::cout << "ALARM ALARM i " << input_names.size() << "  t " << input_tags.size() << std::endl;
     exit(1);
   }
   for(int i=0; i<input_names.size(); i++){
     if( input_tags[i] == "DEFAULT" ) input_tags[i] = input_names[i].substr(0,input_names[i].size()-5);
+
+		colors_button.push_back(HSLtoRGB(double(indice) / double(input_names.size()), 1, 0.4));
+		//std::cout << colors_button.back()<<" ";
+		colors_text.push_back("000000");
+		indice++;
   }
+
 
 // Check
   std::cout << "Sizes i " << input_names.size() << "  t " << input_tags.size() << std::endl;
@@ -103,7 +151,7 @@ int main(int argc, char** argv){
 // Import JSON into vector
   std::vector<jsoncons::json> trips_coordinate;
   for( auto i : input_names ){
-    jsoncons::json gps_records = jsoncons::json::parse_file(i);
+    jsoncons::json gps_records = jsoncons::json::parse_file(input_folder+i);
     trips_coordinate.push_back( gps_records );
   }
 
@@ -111,7 +159,7 @@ int main(int argc, char** argv){
   for( auto t : trips_coordinate ) std::cout << "Points : " << t.size() << std::endl;
 
 // Write html
-  std::ofstream output(output_name);
+  std::ofstream output(input_folder+output_name);
   output << pre_header;
   output << "\t\t\t" << output_title;
   output << post_header;
@@ -180,7 +228,7 @@ int main(int argc, char** argv){
     output << "\n\t\t\t\tTrajectory_" << t << " = new google.maps.Polyline({\n";
     output << "\t\t\t\t\tpath: PolyPath_" << t << ",\n";
     output << "\t\t\t\t\tgeodesic: true,\n";
-    output << "\t\t\t\t\tstrokeColor: \'#" << colors_button[i%colors_button.size()] << "\',\n";
+    output << "\t\t\t\t\tstrokeColor: \'#" << colors_button[i/*%colors_button.size()*/] << "\',\n";
     output << "\t\t\t\t\tstrokeOpacity: 1.,\n";
     output << "\t\t\t\t\tstrokeWeight: 2\n";
     output << "\t\t\t\t});\n";
@@ -200,7 +248,7 @@ int main(int argc, char** argv){
   output << "\t\t<div id=\"panel\">" << std::endl;
   for( size_t i=0; i<input_tags.size(); i++ ){
     output << "\t\t\t<button onclick=\"toggle_" << input_tags[i] << "()\" style=\"background-color:#" 
-           << colors_button[i%colors_button.size()] << "; color:#" << colors_text[i%colors_button.size()] << "\">" << input_tags[i] << "</button>\n";
+           << colors_button[i/*%colors_button.size()*/] << "; color:#" << colors_text[i/*%colors_button.size()*/] << "\">" << input_tags[i] << "</button>\n";
   }
   output << "\t\t</div>" << std::endl;
   output << "\t</body>" << std::endl;
