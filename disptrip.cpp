@@ -32,12 +32,12 @@ using namespace std;
 #define MAJOR_VERSION           1
 #define MINOR_VERSION           0
 
-std::vector<std::string> colors_button/*({"FF5555", "0000FF", "00FF00", "AC0EAC"})*/;
-std::vector<std::string> colors_text  /*({"000", "FFF", "000", "FFF"})            */;
+std::vector<std::string> colors_button;
+std::vector<std::string> colors_text;
 
 string HSLtoRGB(double hue, double sat, double light) {
 	double red, green, blue;
-	red = green = blue = light; //default è grigio
+	red = green = blue = light;                     // grey is default
 	double v;
 	v = light <= 0.5 ? light*(1. + sat) : light + sat - light*sat;
 	if(v > 0) {
@@ -123,24 +123,31 @@ int main(int argc, char** argv){
     }
   }
   filein.close();
-	//****************
-	double indice = 0;
 
+// Checks
+	double index = 0;
   if( input_names.size() != input_tags.size() ){
     std::cout << "ALARM ALARM i " << input_names.size() << "  t " << input_tags.size() << std::endl;
     exit(1);
   }
-  for(int i=0; i<input_names.size(); i++){
-    if( input_tags[i] == "DEFAULT" ) input_tags[i] = input_names[i].substr(0,input_names[i].size()-5);
-
-		colors_button.push_back(HSLtoRGB(double(indice) / double(input_names.size()), 1, 0.4));
-		//std::cout << colors_button.back()<<" ";
-		colors_text.push_back("000000");
-		indice++;
+  for (auto i : input_names) {
+    filein.open(input_folder+i);
+    if (!filein) {
+      std::cout << "ERROR unable to open " << input_folder + i << ". Quitting..." << std::endl;
+      exit(1);
+    }
+    filein.close();
   }
 
+// Constructing DEFAULT tags and colors 
+  for(int i=0; i<input_names.size(); i++){
+    if( input_tags[i] == "DEFAULT" ) input_tags[i] = input_names[i].substr(0,input_names[i].size()-5);
+		colors_button.push_back(HSLtoRGB(index / double(input_names.size()), 1, 0.4));
+		colors_text.push_back("000000");
+		index++;
+  }
 
-// Check
+// Summary
   std::cout << "Sizes i " << input_names.size() << "  t " << input_tags.size() << std::endl;
   std::cout << "Inputs" << std::endl;
   for(size_t i=0; i<input_names.size(); i++)
@@ -169,7 +176,7 @@ int main(int argc, char** argv){
     output << "\n\t\t\tfunction initialize(){\n";
   for( size_t i=0; i<input_tags.size(); i++ ){
     output << "\t\t\t\tvar Locations_" << input_tags[i] << " = [\n\n";
-    if( trips_coordinate[i].type() == 1 ) {    // object style
+    if( trips_coordinate[i].is_object() ) {    // object style
       int j = 0;
       for(auto rec = trips_coordinate[i].begin_members(); rec != trips_coordinate[i].end_members(); ++rec, ++j) {
         try{
@@ -190,7 +197,7 @@ int main(int argc, char** argv){
         }
       }
     }
-    else if ( trips_coordinate[i].type() == 2 ){    // array style
+    else if ( trips_coordinate[i].is_array() ){    // array style
       for (size_t j = 0; j < trips_coordinate[i].size(); ++j){
         try{
           output 
@@ -228,7 +235,7 @@ int main(int argc, char** argv){
     output << "\n\t\t\t\tTrajectory_" << t << " = new google.maps.Polyline({\n";
     output << "\t\t\t\t\tpath: PolyPath_" << t << ",\n";
     output << "\t\t\t\t\tgeodesic: true,\n";
-    output << "\t\t\t\t\tstrokeColor: \'#" << colors_button[i/*%colors_button.size()*/] << "\',\n";
+    output << "\t\t\t\t\tstrokeColor: \'#" << colors_button[i] << "\',\n";
     output << "\t\t\t\t\tstrokeOpacity: 1.,\n";
     output << "\t\t\t\t\tstrokeWeight: 2\n";
     output << "\t\t\t\t});\n";
@@ -248,7 +255,7 @@ int main(int argc, char** argv){
   output << "\t\t<div id=\"panel\">" << std::endl;
   for( size_t i=0; i<input_tags.size(); i++ ){
     output << "\t\t\t<button onclick=\"toggle_" << input_tags[i] << "()\" style=\"background-color:#" 
-           << colors_button[i/*%colors_button.size()*/] << "; color:#" << colors_text[i/*%colors_button.size()*/] << "\">" << input_tags[i] << "</button>\n";
+           << colors_button[i] << "; color:#" << colors_text[i] << "\">" << input_tags[i] << "</button>\n";
   }
   output << "\t\t</div>" << std::endl;
   output << "\t</body>" << std::endl;
