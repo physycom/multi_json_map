@@ -71,19 +71,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)</OutDir>
-    <TargetName>distri</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)</OutDir>
-    <TargetName>distri</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)</OutDir>
-    <TargetName>distri</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)</OutDir>
-    <TargetName>distri</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -126,9 +122,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="disptrip.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="html_headers.h" />
     <ClInclude Include="jsoncons\json.hpp" />
     <ClInclude Include="jsoncons\json1.hpp" />
@@ -149,6 +142,9 @@
     <ClInclude Include="jsoncons\json_type_traits.hpp" />
     <ClInclude Include="jsoncons\output_format.hpp" />
     <ClInclude Include="jsoncons\parse_error_handler.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="multi_json_map.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
