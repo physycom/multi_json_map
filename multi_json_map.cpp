@@ -112,7 +112,8 @@ int main(int argc, char** argv){
       output_name = value;
     }
 		else if(key == "TITLE") {
-			output_title = value;
+      std::getline(filein, output_title);
+			output_title = value+output_title;
 		}
 		else if(key == "FOLDER") {
 			input_folder = value;
