@@ -46,9 +46,7 @@ const char post_header[] = R"(
       }
     </style>
 
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
-    <script type="text/javascript"  src="https://maps.googleapis.com/maps/api/js?v=3.21&sensor=false"></script>
-    <script type="text/javascript"  src="https://maps.googleapis.com/maps/api/js?libraries=geometry"></script>  
+    <script type="text/javascript"  src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 <!-- Local libraries -->
     <script type="text/javascript" src="https://raw.githubusercontent.com/physycom/ruler/master/markerwithlabel.js"></script>
     <script type="text/javascript" src="https://raw.githubusercontent.com/physycom/ruler/master/ContextMenu.js"></script>
