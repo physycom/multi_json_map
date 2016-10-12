@@ -30,7 +30,7 @@ along with multi_json_map. If not, see <http://www.gnu.org/licenses/>.
 using namespace std;
 
 #define MAJOR_VERSION           1
-#define MINOR_VERSION           0
+#define MINOR_VERSION           1
 
 std::vector<std::string> colors_button;
 std::vector<std::string> colors_text;
@@ -71,28 +71,42 @@ string HSLtoRGB(double hue, double sat, double light) {
 
 
 void usage(char* progname){
-  // Usage
-    std::cout << "Usage: " << progname << " path/to/config" << std::endl;
-    exit(1);
+  std::cout << "Usage: " << progname << " path/to/config" << std::endl << std::endl;
+  std::cout << "      To display on google maps a number of json encoded set of GNSS points." << std::endl;
+  std::cout << "Usage: " << progname << " -conf_t" << std::endl;
+  std::cout << "      To generate a dummy config file." << std::endl;
+
 }
 
 int main(int argc, char** argv){
-
   std::cout << "Display_Multiple_Trips (for Google Maps only) v" << MAJOR_VERSION << "." << MINOR_VERSION << std::endl;
 
-// Parsing command line
+  // Parsing command line
   std::string config_name;
   if( argc == 2 ){
     config_name = argv[1];
+    if (config_name == "-conf_t") {
+      std::ofstream config("config.cfg");
+      config << R"(TAG1   = label for data 1
+JSON1  = file for data 1
+TAG2   = label for data 2
+JSON2  = file for data 2
+HTML   = html filename
+FOLDER = set working folder (optional)
+)";
+      cout << "Config template created. Quitting..." << endl;
+      exit(1);
+    }
   }
   else { 
     std::cout << "ERROR: No arguments. Read usage and relaunch properly." << std::endl; 
     usage(argv[0]); 
+    exit(-1);
   }
 
 // Safe config file parsing
   std::vector<std::string> input_names, input_tags;
-  std::string output_name, output_title,input_folder("");
+  std::string output_name, output_title, input_folder("");
   std::string key, equal, value;
   ifstream filein(config_name);
   if( !filein ) {
@@ -128,14 +142,14 @@ int main(int argc, char** argv){
 // Checks
 	double index = 0;
   if( input_names.size() != input_tags.size() ){
-    std::cout << "ALARM ALARM i " << input_names.size() << "  t " << input_tags.size() << std::endl;
-    exit(1);
+    std::cout << "WARNING: names(" << input_names.size() << ") and tags(" << input_tags.size() << "don't match!" << std::endl;
+    exit(-2);
   }
   for (auto i : input_names) {
     filein.open(input_folder+i);
     if (!filein) {
       std::cout << "ERROR unable to open " << input_folder + i << ". Quitting..." << std::endl;
-      exit(1);
+      exit(-3);
     }
     filein.close();
   }
@@ -159,7 +173,15 @@ int main(int argc, char** argv){
 // Import JSON into vector
   std::vector<jsoncons::json> trips_coordinate;
   for( auto i : input_names ){
-    jsoncons::json gps_records = jsoncons::json::parse_file(input_folder+i);
+    jsoncons::json gps_records 
+    try {
+      jsoncons::json::parse_file(input_folder + i);
+    }
+    catch (std::exception &e) {
+      std::cout << "Skipping invalid JSON input : " << input_folder + i << std::endl;
+      std::cout << "EXCEPTION: " << e.what() << std::endl;
+      continue;
+    }
     trips_coordinate.push_back( gps_records );
   }
 
