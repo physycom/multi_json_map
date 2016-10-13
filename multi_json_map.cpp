@@ -28,7 +28,7 @@ along with multi_json_map. If not, see <http://www.gnu.org/licenses/>.
 #include "html_headers.h"
 
 #define MAJOR_VERSION           1
-#define MINOR_VERSION           2
+#define MINOR_VERSION           3
 
 std::vector<std::string> colors_button;
 std::vector<std::string> colors_text;
@@ -91,13 +91,13 @@ HTML   = html filename
 FOLDER = set working folder (optional)
 )";
       std::cerr << "Config template created. Quitting..." << std::endl;
-      exit(1);
+      exit(-1);
     }
   }
   else { 
     std::cerr << "ERROR: No arguments. Read usage and relaunch properly." << std::endl; 
     usage(argv[0]); 
-    exit(-1);
+    exit(-2);
   }
 
 // Safe config file parsing
@@ -107,10 +107,14 @@ FOLDER = set working folder (optional)
   std::ifstream filein(config_name);
   if( !filein ) {
     std::cerr << "Configuration file " << config_name << " not found. Quitting..." << std::endl;
-    exit(3);
+    exit(-3);
   }
   while ( filein >> key >> equal >> value ){
-    if ( key.substr(0,4) == "JSON" ){
+    if (key[0] == '#' || key[0] == '!') {
+      std::getline(filein, key);
+      continue;
+    }
+    else if ( key.substr(0,4) == "JSON" ){
       while( input_names.size() > input_tags.size() ) input_tags.push_back("DEFAULT");
       input_names.push_back(value);
     }
@@ -130,7 +134,7 @@ FOLDER = set working folder (optional)
 		}
     else{ 
       std::cerr << "Key " << key << " unknown. Edit " << config_name << std::endl;
-      exit(3);
+      exit(-4);
     }
   }
   filein.close();
@@ -139,13 +143,13 @@ FOLDER = set working folder (optional)
 	double index = 0;
   if( input_names.size() != input_tags.size() ){
     std::cerr << "WARNING: names(" << input_names.size() << ") and tags(" << input_tags.size() << "don't match!" << std::endl;
-    exit(-2);
+    exit(-5);
   }
   for (auto i : input_names) {
     filein.open(input_folder+i);
     if (!filein) {
       std::cerr << "ERROR unable to open " << input_folder + i << ". Quitting..." << std::endl;
-      exit(-3);
+      exit(-6);
     }
     filein.close();
   }
@@ -177,8 +181,8 @@ FOLDER = set working folder (optional)
   std::cout << "Trip number : " << input_names.size() << std::endl;
   std::cout << "Input files : " << std::endl;
   for(size_t i=0; i<input_names.size(); i++)
-    std::cout << i+1 << "/" << input_names.size() << ")\t" << input_names[i] << " (" << input_tags[i] << ") [records " << trips_coordinate[i].size() << "]" << std::endl;
-  std::cout << "Output html : " << output_name << " (" << output_title << ")" << std::endl;
+    std::cout << i+1 << "/" << input_names.size() << ")\t" << input_names[i] << " \"" << input_tags[i] << "\" [records " << trips_coordinate[i].size() << "]" << std::endl;
+  std::cout << "Output html : " << output_name << ((output_title=="")?"": " \"" + output_title + "\"") << std::endl;
 
 // Generate html
   std::ofstream output(input_folder+output_name);
