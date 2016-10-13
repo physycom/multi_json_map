@@ -27,15 +27,13 @@ along with multi_json_map. If not, see <http://www.gnu.org/licenses/>.
 
 #include "html_headers.h"
 
-using namespace std;
-
 #define MAJOR_VERSION           1
 #define MINOR_VERSION           1
 
 std::vector<std::string> colors_button;
 std::vector<std::string> colors_text;
 
-string HSLtoRGB(double hue, double sat, double light) {
+std::string HSLtoRGB(double hue, double sat, double light) {
 	double red, green, blue;
 	red = green = blue = light;                     // grey is default
 	double v;
@@ -57,7 +55,6 @@ string HSLtoRGB(double hue, double sat, double light) {
 		}
 	}
 	std::stringstream stream;
-
 
 	red *= 255;
 	green *= 255;
@@ -94,7 +91,7 @@ JSON2  = file for data 2
 HTML   = html filename
 FOLDER = set working folder (optional)
 )";
-      cout << "Config template created. Quitting..." << endl;
+      std::cout << "Config template created. Quitting..." << std::endl;
       exit(1);
     }
   }
@@ -108,9 +105,9 @@ FOLDER = set working folder (optional)
   std::vector<std::string> input_names, input_tags;
   std::string output_name, output_title, input_folder("");
   std::string key, equal, value;
-  ifstream filein(config_name);
+  std::ifstream filein(config_name);
   if( !filein ) {
-    cout << "Configuration file " << config_name << " not found. Quitting..." << endl;
+    std::cout << "Configuration file " << config_name << " not found. Quitting..." << std::endl;
     exit(3);
   }
   while ( filein >> key >> equal >> value ){
@@ -133,7 +130,7 @@ FOLDER = set working folder (optional)
 			input_folder = value;
 		}
     else{ 
-      cout << "Key " << key << " unknown. Edit " << config_name << endl;
+      std::cout << "Key " << key << " unknown. Edit " << config_name << std::endl;
       exit(3);
     }
   }
