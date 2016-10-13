@@ -173,7 +173,7 @@ FOLDER = set working folder (optional)
 // Import JSON into vector
   std::vector<jsoncons::json> trips_coordinate;
   for( auto i : input_names ){
-    jsoncons::json gps_records 
+    jsoncons::json gps_records;
     try {
       jsoncons::json::parse_file(input_folder + i);
     }
