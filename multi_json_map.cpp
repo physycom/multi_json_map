@@ -68,11 +68,10 @@ std::string HSLtoRGB(double hue, double sat, double light) {
 
 
 void usage(char* progname){
-  std::cout << "Usage: " << progname << " path/to/config" << std::endl << std::endl;
-  std::cout << "      To display on google maps a number of json encoded set of GNSS points." << std::endl;
-  std::cout << "Usage: " << progname << " -conf_t" << std::endl;
-  std::cout << "      To generate a dummy config file." << std::endl;
-
+  std::cerr << "Usage: " << progname << " path/to/config" << std::endl << std::endl;
+  std::cerr << "      To display on google maps a number of json encoded set of GNSS points." << std::endl;
+  std::cerr << "Usage: " << progname << " -conf_t" << std::endl;
+  std::cerr << "      To generate a dummy config file." << std::endl;
 }
 
 int main(int argc, char** argv){
@@ -91,12 +90,12 @@ JSON2  = file for data 2
 HTML   = html filename
 FOLDER = set working folder (optional)
 )";
-      std::cout << "Config template created. Quitting..." << std::endl;
+      std::cerr << "Config template created. Quitting..." << std::endl;
       exit(1);
     }
   }
   else { 
-    std::cout << "ERROR: No arguments. Read usage and relaunch properly." << std::endl; 
+    std::cerr << "ERROR: No arguments. Read usage and relaunch properly." << std::endl; 
     usage(argv[0]); 
     exit(-1);
   }
@@ -107,7 +106,7 @@ FOLDER = set working folder (optional)
   std::string key, equal, value;
   std::ifstream filein(config_name);
   if( !filein ) {
-    std::cout << "Configuration file " << config_name << " not found. Quitting..." << std::endl;
+    std::cerr << "Configuration file " << config_name << " not found. Quitting..." << std::endl;
     exit(3);
   }
   while ( filein >> key >> equal >> value ){
@@ -130,7 +129,7 @@ FOLDER = set working folder (optional)
 			input_folder = value;
 		}
     else{ 
-      std::cout << "Key " << key << " unknown. Edit " << config_name << std::endl;
+      std::cerr << "Key " << key << " unknown. Edit " << config_name << std::endl;
       exit(3);
     }
   }
@@ -139,13 +138,13 @@ FOLDER = set working folder (optional)
 // Checks
 	double index = 0;
   if( input_names.size() != input_tags.size() ){
-    std::cout << "WARNING: names(" << input_names.size() << ") and tags(" << input_tags.size() << "don't match!" << std::endl;
+    std::cerr << "WARNING: names(" << input_names.size() << ") and tags(" << input_tags.size() << "don't match!" << std::endl;
     exit(-2);
   }
   for (auto i : input_names) {
     filein.open(input_folder+i);
     if (!filein) {
-      std::cout << "ERROR unable to open " << input_folder + i << ". Quitting..." << std::endl;
+      std::cerr << "ERROR unable to open " << input_folder + i << ". Quitting..." << std::endl;
       exit(-3);
     }
     filein.close();
@@ -159,14 +158,6 @@ FOLDER = set working folder (optional)
 		index++;
   }
 
-// Summary
-  std::cout << "Sizes i " << input_names.size() << "  t " << input_tags.size() << std::endl;
-  std::cout << "Inputs" << std::endl;
-  for(size_t i=0; i<input_names.size(); i++)
-    std::cout << i << " : " << input_names[i] << "     " << input_tags[i] << std::endl; 
-  std::cout << "Output" << std::endl;
-  std::cout << output_name << "   " << output_title << std::endl;
-
 // Import JSON into vector
   std::vector<jsoncons::json> trips_coordinate;
   for( auto i : input_names ){
@@ -175,17 +166,21 @@ FOLDER = set working folder (optional)
       jsoncons::json::parse_file(input_folder + i);
     }
     catch (std::exception &e) {
-      std::cout << "Skipping invalid JSON input : " << input_folder + i << std::endl;
-      std::cout << "EXCEPTION: " << e.what() << std::endl;
+      std::cerr << "Skipping invalid JSON input : " << input_folder + i << std::endl;
+      std::cerr << "EXCEPTION: " << e.what() << std::endl;
       continue;
     }
     trips_coordinate.push_back( gps_records );
   }
 
-  std::cout << "Trips size : " << trips_coordinate.size() << std::endl;
-  for( auto t : trips_coordinate ) std::cout << "Points : " << t.size() << std::endl;
+// Summary
+  std::cout << "Trip number : " << input_names.size() << std::endl;
+  std::cout << "Input files : " << std::endl;
+  for(size_t i=0; i<input_names.size(); i++)
+    std::cout << i+1 << "/" << input_names.size() << ")\t" << input_names[i] << " (" << input_tags[i] << ") [records " << trips_coordinate[i].size() << "]" << std::endl;
+  std::cout << "Output html : " << output_name << " (" << output_title << ")" << std::endl;
 
-// Write html
+// Generate html
   std::ofstream output(input_folder+output_name);
   output << pre_header;
   output << "\t\t\t" << output_title;
