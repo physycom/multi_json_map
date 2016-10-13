@@ -28,7 +28,7 @@ along with multi_json_map. If not, see <http://www.gnu.org/licenses/>.
 #include "html_headers.h"
 
 #define MAJOR_VERSION           1
-#define MINOR_VERSION           1
+#define MINOR_VERSION           2
 
 std::vector<std::string> colors_button;
 std::vector<std::string> colors_text;
@@ -68,10 +68,10 @@ std::string HSLtoRGB(double hue, double sat, double light) {
 
 
 void usage(char* progname){
-  std::cerr << "Usage: " << progname << " path/to/config" << std::endl << std::endl;
-  std::cerr << "      To display on google maps a number of json encoded set of GNSS points." << std::endl;
+  std::cerr << "Usage: " << progname << " path/to/config" << std::endl;
+  std::cerr << "      To display on google maps a number of json encoded set of GNSS points." << std::endl << std::endl;
   std::cerr << "Usage: " << progname << " -conf_t" << std::endl;
-  std::cerr << "      To generate a dummy config file." << std::endl;
+  std::cerr << "      To generate a dummy config file." << std::endl << std::endl;
 }
 
 int main(int argc, char** argv){
