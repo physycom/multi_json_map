@@ -163,7 +163,7 @@ FOLDER = set working folder (optional)
   for( auto i : input_names ){
     jsoncons::json gps_records;
     try {
-      jsoncons::json::parse_file(input_folder + i);
+      gps_records = jsoncons::json::parse_file(input_folder + i);
     }
     catch (std::exception &e) {
       std::cerr << "Skipping invalid JSON input : " << input_folder + i << std::endl;
