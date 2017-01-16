@@ -17,8 +17,6 @@ You should have received a copy of the GNU General Public License
 along with multi_json_map. If not, see <http://www.gnu.org/licenses/>.
 ***************************************************************************/
 
-#define _CRT_SECURE_NO_WARNINGS
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -34,36 +32,36 @@ std::vector<std::string> colors_button;
 std::vector<std::string> colors_text;
 
 std::string HSLtoRGB(double hue, double sat, double light) {
-	double red, green, blue;
-	red = green = blue = light;                     // grey is default
-	double v;
-	v = light <= 0.5 ? light*(1. + sat) : light + sat - light*sat;
-	if(v > 0) {
-		double m, sv;
-		int sextant;
-		double fract, vsf, mid1, mid2;
-		m = light + light - v; sv = (v - m) / v;
-		hue *= 6.0; sextant = int(hue);
-		fract = hue - sextant; vsf = v*sv*fract; mid1 = m + vsf; mid2 = v - vsf;
-		switch(sextant) {
-		case 0: red = v; green = mid1; blue = m; break;
-		case 1: red = mid2; green = v; blue = m; break;
-		case 2: red = m; green = v; blue = mid1; break;
-		case 3: red = m; green = mid2; blue = v; break;
-		case 4: red = mid1; green = m; blue = v; break;
-		case 5: red = v; green = m; blue = mid2; break;
-		}
-	}
-	std::stringstream stream;
+  double red, green, blue;
+  red = green = blue = light;                     // grey is default
+  double v;
+  v = light <= 0.5 ? light*(1. + sat) : light + sat - light*sat;
+  if(v > 0) {
+    double m, sv;
+    int sextant;
+    double fract, vsf, mid1, mid2;
+    m = light + light - v; sv = (v - m) / v;
+    hue *= 6.0; sextant = int(hue);
+    fract = hue - sextant; vsf = v*sv*fract; mid1 = m + vsf; mid2 = v - vsf;
+    switch(sextant) {
+    case 0: red = v; green = mid1; blue = m; break;
+    case 1: red = mid2; green = v; blue = m; break;
+    case 2: red = m; green = v; blue = mid1; break;
+    case 3: red = m; green = mid2; blue = v; break;
+    case 4: red = mid1; green = m; blue = v; break;
+    case 5: red = v; green = m; blue = mid2; break;
+    }
+  }
+  std::stringstream stream;
 
-	red *= 255;
-	green *= 255;
-	blue *= 255;
-	stream
-		<< std::setfill('0') << std::setw(2) << std::hex << int(red  )
-		<< std::setfill('0') << std::setw(2) << std::hex << int(green) 
-		<< std::setfill('0') << std::setw(2) << std::hex << int(blue ) ;
-	return stream.str();
+  red *= 255;
+  green *= 255;
+  blue *= 255;
+  stream
+    << std::setfill('0') << std::setw(2) << std::hex << int(red  )
+    << std::setfill('0') << std::setw(2) << std::hex << int(green) 
+    << std::setfill('0') << std::setw(2) << std::hex << int(blue ) ;
+  return stream.str();
 };
 
 
@@ -125,13 +123,13 @@ FOLDER = set working folder (optional)
       while( input_names.size() > input_tags.size() ) input_tags.push_back("DEFAULT");
       output_name = value;
     }
-		else if(key == "TITLE") {
+    else if(key == "TITLE") {
       std::getline(filein, output_title);
-			output_title = value+output_title;
-		}
-		else if(key == "FOLDER") {
-			input_folder = value;
-		}
+      output_title = value+output_title;
+    }
+    else if(key == "FOLDER") {
+      input_folder = value;
+    }
     else{ 
       std::cerr << "Key " << key << " unknown. Edit " << config_name << std::endl;
       exit(-4);
@@ -140,7 +138,7 @@ FOLDER = set working folder (optional)
   filein.close();
 
 // Checks
-	double index = 0;
+  double index = 0;
   if( input_names.size() != input_tags.size() ){
     std::cerr << "WARNING: names(" << input_names.size() << ") and tags(" << input_tags.size() << "don't match!" << std::endl;
     exit(-5);
@@ -157,9 +155,9 @@ FOLDER = set working folder (optional)
 // Constructing DEFAULT tags and colors 
   for(int i=0; i<input_names.size(); i++){
     if( input_tags[i] == "DEFAULT" ) input_tags[i] = input_names[i].substr(0,input_names[i].size()-5);
-		colors_button.push_back(HSLtoRGB(index / double(input_names.size()), 1, 0.4));
-		colors_text.push_back("000000");
-		index++;
+    colors_button.push_back(HSLtoRGB(index / double(input_names.size()), 1, 0.4));
+    colors_text.push_back("000000");
+    index++;
   }
 
 // Import JSON into vector

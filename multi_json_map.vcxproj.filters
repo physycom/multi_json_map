@@ -13,74 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\jsoncons">
-      <UniqueIdentifier>{114f1102-9837-4a5e-a126-a1cdc6f21632}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="html_headers.h">
+    <ClInclude Include="src\html_headers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="jsoncons\json.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_deserializer.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_exception.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_filter.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_input_handler.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_output_handler.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_parser.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_parser_category.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_reader.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_serializer.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_structures.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_text_error_category.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json_type_traits.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json1.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\json2.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\jsoncons.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\jsoncons_config.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\output_format.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncons\parse_error_handler.hpp">
-      <Filter>Header Files\jsoncons</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="multi_json_map.cpp">
+    <ClCompile Include="src\multi_json_map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
