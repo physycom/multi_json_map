@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\html_headers.h" />
+    <ClInclude Include="..\src\html_headers.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\multi_json_map.cpp" />
+    <ClCompile Include="..\src\multi_json_map.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9FC5F7C5-F405-4AF5-BEE4-1DE931C0E425}</ProjectGuid>

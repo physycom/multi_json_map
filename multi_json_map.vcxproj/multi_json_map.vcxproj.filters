@@ -15,12 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\html_headers.h">
+    <ClInclude Include="..\src\html_headers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\multi_json_map.cpp">
+    <ClCompile Include="..\src\multi_json_map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
