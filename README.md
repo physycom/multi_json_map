@@ -16,7 +16,7 @@ author: "Di Cristina, Fabbri, Guidetti, Sinigardi"
 </a>
 <a href="https://ci.appveyor.com/project/cenit/multi-json-map"> 
 <div class="image">
-<img src="https://ci.appveyor.com/api/projects/status/w7o0yyvsgfuv4bnv?svg=true" width="90" height="20" alt="Build Status"> 
+<img src="https://ci.appveyor.com/api/projects/status/uleaal97meki5e6x?svg=true" width="90" height="20" alt="Build Status"> 
 </div>
 </a>
 
