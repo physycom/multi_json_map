@@ -117,7 +117,9 @@ FOLDER = set working folder (optional)
       input_names.push_back(value);
     }
     else if ( key.substr(0,3) == "TAG" ){
-      input_tags.push_back(value);
+      std::string s;
+      std::getline(filein, s);
+      input_tags.push_back(value+s);
     }
     else if ( key == "HTML" ){
       while( input_names.size() > input_tags.size() ) input_tags.push_back("DEFAULT");
@@ -151,6 +153,7 @@ FOLDER = set working folder (optional)
     }
     filein.close();
   }
+  if (output_name == "") output_name = "multi_map.html";
 
 // Constructing DEFAULT tags and colors 
   for(int i=0; i<input_names.size(); i++){
