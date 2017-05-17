@@ -274,7 +274,7 @@ FOLDER = set working folder (optional)
 
     output << "\t\t\t\t\tgoogle.maps.event.addListener(Marker, 'click', (function(marker, i) {\n";
     output << "\t\t\t\t\t\treturn function() {\n";
-    output << "\t\t\t\t\t\t\tinfowindow.setContent(Locations_originali[i][2]);\n";
+    output << "\t\t\t\t\t\t\tinfowindow.setContent(Locations_" << t << "[i][2]);\n";
     output << "\t\t\t\t\t\t\tinfowindow.open(map, marker);\n";
     output << "\t\t\t\t\t\t}\n";
     output << "\t\t\t\t\t})(Marker, i));\n";
