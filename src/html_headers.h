@@ -47,11 +47,14 @@ const char post_header[] = R"(
     </style>
 
     <script type="text/javascript"  src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-<!-- Local libraries -->
-    <script type="text/javascript" src="https://raw.githubusercontent.com/physycom/ruler/master/markerwithlabel.js"></script>
-    <script type="text/javascript" src="https://raw.githubusercontent.com/physycom/ruler/master/ContextMenu.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://cdn.rawgit.com/physycom/ruler/master/ruler_map.css">
-    <script type="text/javascript" src="https://raw.githubusercontent.com/physycom/ruler/master/ruler_map.js"></script>       
+<!-- Remote Physycom libraries, bound to 9f9ad71c commit -->
+    <script type="text/javascript" src="https://cdn.rawgit.com/physycom/ruler/9f9ad71c/markerwithlabel.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/physycom/ruler/9f9ad71c/ContextMenu.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/physycom/ruler/9f9ad71c/ruler_map.css">
+    <script type="text/javascript" src="https://cdn.rawgit.com/physycom/ruler/9f9ad71c/ruler_map.js"></script>   
+<!-- Remote png libraries -->
+    <script type="text/javascript" src="https://github.com/niklasvh/html2canvas/releases/download/0.4.1/html2canvas.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js" ></script>   
   </head> 
 
   <body>

@@ -195,3 +195,6 @@ ModelManifest.xml
 /samples/config.cfg
 /samples/gio.html
 *.db
+*.json
+*.sqlite
+*.config
