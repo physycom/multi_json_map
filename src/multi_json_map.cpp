@@ -1,4 +1,4 @@
-/* Copyright 2015 - Marco Di Cristina, Alessandro Fabbri, Andrea Ferracin, Mattia Guidetti, Stefano Sinigardi,  */
+/* Copyright 2015-2017 - Marco Di Cristina, Alessandro Fabbri, Andrea Ferracin, Mattia Guidetti, Stefano Sinigardi,  */
 
 /***************************************************************************
 This file is part of multi_json_map.

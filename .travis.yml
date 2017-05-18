@@ -1,12 +1,32 @@
-language: c++
-compiler:
-  - gcc
-before_install:
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo apt-get update -qq
+language: cpp
+
+os:
+  - linux
+  - osx
+
+compiler: 
+    - gcc
+    - clang
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-6
+    - g++-6
+
+matrix:
+    exclude:
+    - os: osx
+      compiler: gcc
+    - os: linux
+      compiler: clang
+
 install:
-  - sudo apt-get install -qq g++-4.8
-  - export CXX="g++-4.8"
+  # Linux Setup 
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX="g++-6" CC="gcc-6" ;fi
+
 script:
-  - make all
+  - mkdir build && cd build && cmake .. && cmake --build . --target install && cd ..
 
