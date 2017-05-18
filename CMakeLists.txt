@@ -4,6 +4,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 project (multi_json_map)
+enable_language(CXX)
 set (CMAKE_CXX_STANDARD 11)
 
 ### Set output directories on a per-configuration base
