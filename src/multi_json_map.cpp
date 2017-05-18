@@ -156,7 +156,7 @@ FOLDER = set working folder (optional)
   if (output_name == "") output_name = "multi_map.html";
 
   // Constructing DEFAULT tags and colors 
-  for (int i = 0; i < input_names.size(); i++) {
+  for (int i = 0; i < (int)input_names.size(); i++) {
     if (input_tags[i] == "DEFAULT") input_tags[i] = input_names[i].substr(0, input_names[i].size() - 5);
     colors_button.push_back(HSLtoRGB(index / double(input_names.size()), 1, 0.4));
     colors_text.push_back("000000");
