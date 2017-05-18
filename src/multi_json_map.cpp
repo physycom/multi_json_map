@@ -83,9 +83,11 @@ int main(int argc, char** argv) {
       std::ofstream config("config.cfg");
       config << R"(TAG1   = label for data 1
 JSON1  = file for data 1
-TAG2   = label for data 2
+TAG1   = label for data 1
+MODE1  = (m)arkers or (p)olylines, none for both
 JSON2  = file for data 2
 HTML   = html filename
+TITLE  = html tab title
 FOLDER = set working folder (optional)
 )";
       std::cerr << "Config template created. Quitting..." << std::endl;
@@ -99,7 +101,7 @@ FOLDER = set working folder (optional)
   }
 
   // Safe config file parsing
-  std::vector<std::string> input_names, input_tags;
+  std::vector<std::string> input_names, input_tags, input_modes;
   std::string output_name, output_title, input_folder("");
   std::string key, equal, value;
   std::ifstream filein(config_name);
@@ -114,6 +116,7 @@ FOLDER = set working folder (optional)
     }
     else if (key.substr(0, 4) == "JSON") {
       while (input_names.size() > input_tags.size()) input_tags.push_back("DEFAULT");
+      while (input_names.size() > input_modes.size()) input_modes.push_back("");
       input_names.push_back(value);
     }
     else if (key.substr(0, 3) == "TAG") {
@@ -121,8 +124,12 @@ FOLDER = set working folder (optional)
       std::getline(filein, s);
       input_tags.push_back(value + s);
     }
+    else if (key.substr(0, 4) == "MODE") {
+      input_modes.push_back(value);
+    }
     else if (key == "HTML") {
       while (input_names.size() > input_tags.size()) input_tags.push_back("DEFAULT");
+      while (input_names.size() > input_modes.size()) input_modes.push_back("");
       output_name = value;
     }
     else if (key == "TITLE") {
@@ -144,6 +151,10 @@ FOLDER = set working folder (optional)
   if (input_names.size() != input_tags.size()) {
     std::cerr << "WARNING: names(" << input_names.size() << ") and tags(" << input_tags.size() << "don't match!" << std::endl;
     exit(-5);
+  }
+  if (input_names.size() != input_modes.size()) {
+    std::cerr << "WARNING: names(" << input_names.size() << ") and modes(" << input_modes.size() << "don't match!" << std::endl;
+    exit(-6);
   }
   for (auto i : input_names) {
     filein.open(input_folder + i);
@@ -190,7 +201,7 @@ FOLDER = set working folder (optional)
   output << pre_header;
   output << "\t\t" << ((output_title == "") ? "Multi-trip" : output_title);
   output << post_header;
-  
+
   for (auto t : input_tags) {
     output << "\t\tvar Trajectory_" << t << ";\n";
     output << "\t\tvar Markers_" << t << " = [];\n\n";
@@ -252,25 +263,29 @@ FOLDER = set working folder (optional)
   output << "\t\t\t\tvar infowindow = new google.maps.InfoWindow();\n";
   output << "\t\t\t\tvar bounds = new google.maps.LatLngBounds();\n";
 
-  for (size_t i = 0; i < input_tags.size(); i++) {
+  for (size_t i = 0; i < input_tags.size(); ++i) {
     std::string t = input_tags[i];
+
     output << "\n\t\t\t\t//////// TRIP " << t << std::endl;
     output << "\t\t\t\tvar PolyPath_" << t << " = [];\n";
     output << "\t\t\t\tfor(i=0; i<Locations_" << t << ".length; i++) {\n";
     output << "\t\t\t\t\tvar point = new google.maps.LatLng( Locations_" << t << "[i][0], Locations_" << t << "[i][1] )\n\n";
-    
+
     output << "\t\t\t\t\tPolyPath_" << t << ".push(point);\n";
-    output << "\t\t\t\t\tbounds.extend(point);\n";
-    output << "\t\t\t\t\tMarker = new google.maps.Marker({\n";
-    output << "\t\t\t\t\t\tposition: point,\n";
-    output << "\t\t\t\t\t\tmap : map,\n";
-    output << "\t\t\t\t\t\ticon : {\n";
-    output << "\t\t\t\t\t\t\tpath: google.maps.SymbolPath.CIRCLE,\n";
-    output << "\t\t\t\t\t\t\tstrokeColor : '#" << colors_button[i] << "',\n";
-    output << "\t\t\t\t\t\t\tscale : 3\n";
-    output << "\t\t\t\t\t\t}\n";
-    output << "\t\t\t\t\t});\n";
-    output << "\t\t\t\t\tMarkers_" << t << ".push(Marker);\n\n";
+    output << "\t\t\t\t\tbounds.extend(point);\n\n";
+
+    if (input_modes[i] == "m" || input_modes[i] == "") {
+      output << "\t\t\t\t\tMarker = new google.maps.Marker({\n";
+      output << "\t\t\t\t\t\tposition: point,\n";
+      output << "\t\t\t\t\t\tmap : map,\n";
+      output << "\t\t\t\t\t\ticon : {\n";
+      output << "\t\t\t\t\t\t\tpath: google.maps.SymbolPath.CIRCLE,\n";
+      output << "\t\t\t\t\t\t\tstrokeColor : '#" << colors_button[i] << "',\n";
+      output << "\t\t\t\t\t\t\tscale : 3\n";
+      output << "\t\t\t\t\t\t}\n";
+      output << "\t\t\t\t\t});\n";
+      output << "\t\t\t\t\tMarkers_" << t << ".push(Marker);\n\n";
+    }
 
     output << "\t\t\t\t\tgoogle.maps.event.addListener(Marker, 'click', (function(marker, i) {\n";
     output << "\t\t\t\t\t\treturn function() {\n";
@@ -289,18 +304,25 @@ FOLDER = set working folder (optional)
     output << "\t\t\t\t});\n";
   }
   output << "\n";
-  for (auto t : input_tags)
-    output << "\t\t\t\tTrajectory_" << t << ".setMap(map);\n";
+  for (size_t i = 0; i < input_tags.size(); ++i) {
+    if (input_modes[i] == "p" || input_modes[i] == "") {
+      output << "\t\t\t\tTrajectory_" << input_tags[i] << ".setMap(map);\n";
+    }
+  }
   output << "\n\t\t\t\truler_map = new RulerMap(map);\n";
   output << "\n\t\t\t\tmap.fitBounds(bounds);\n";
   output << "\t\t\t}\n\n";
-  for (auto t : input_tags) {
-    output << "\t\t\tfunction toggle_" << t << "(){\n";
-    output << "\t\t\t\tTrajectory_" << t << ".setMap(Trajectory_" << t << ".getMap() ? null : map);\n";
-    output << "\t\t\t\t\tfor (i = 0; i < Markers_" << t << ".length; i++) {\n";
-    output << "\t\t\t\t\t\tvar mark = Markers_" << t << "[i];\n";
-    output << "\t\t\t\t\t\tmark.setMap(mark.getMap() ? null : map);\n";
-    output << "\t\t\t\t\t}\n";
+  for (size_t i = 0; i < input_tags.size(); ++i) {
+    output << "\t\t\tfunction toggle_" << input_tags[i] << "(){\n";
+    if (input_modes[i] == "p" || input_modes[i] == "") {
+      output << "\t\t\t\tTrajectory_" << input_tags[i] << ".setMap(Trajectory_" << input_tags[i] << ".getMap() ? null : map);\n";
+    }
+    if (input_modes[i] == "m" || input_modes[i] == "") {
+      output << "\t\t\t\t\tfor (i = 0; i < Markers_" << input_tags[i] << ".length; i++) {\n";
+      output << "\t\t\t\t\t\tvar mark = Markers_" << input_tags[i] << "[i];\n";
+      output << "\t\t\t\t\t\tmark.setMap(mark.getMap() ? null : map);\n";
+      output << "\t\t\t\t\t}\n";
+    }
     output << "\t\t\t\t};\n";
   }
   output << "\n\t\t\tgoogle.maps.event.addDomListener(window, \'load\', initialize);\n";
