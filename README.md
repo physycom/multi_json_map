@@ -24,8 +24,11 @@ author: "Di Cristina, Fabbri, Guidetti, Sinigardi"
 This tool parses a number of .json files containing GNSS coordinates as per our file format and produces an .html webpage to compare them in Google Maps.
 
 ### Installation
-**make** and a **C++11** compatible compiler are required. Clone the repo and type ``make``, it should be enough in most cases!   
-There's also a **VS2015** solution avalaible.   
+**CMake** and a **C++11** compatible compiler are required. To build the executable, clone the repo and then type  
+```
+mkdir build ; cd build ; cmake .. ; cmake --build . --target install
+```
+With CMake you can also deploy projects for the most common IDEs.  
 Contains [jsoncons](https://github.com/danielaparker/jsoncons) as a git submodule.
 
 ### Usage
