@@ -28,7 +28,7 @@ install:
   - if [%COMPILER%]==[vs] powershell -exec bypass scripts\bootstrap.ps1
   - if [%COMPILER%]==[vs] vcpkg integrate install
   - cd ..
-  - cd C:\projects\json-packer
+  - cd C:\projects\multi-json-map
 
 build_script:
   - mkdir build
